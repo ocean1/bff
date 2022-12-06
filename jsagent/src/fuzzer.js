@@ -1,6 +1,9 @@
 const { UpdateExpression } = require('esprima');
 
 ast = require('./ast.js');
+agent = require('./agent.js');
+
+console.log(agent)
 
 // SAMPLE_INPUTS 
 codo = "var x = 0;\
@@ -56,9 +59,7 @@ let Fuzzer = class {
             console.log('---- cycle START ----')
 
             // SELECT INPUT VECTOR FROM AVAILABLE ONES
-
             let a = ast.analyze(this.vectors[this.seed % this.vectors.length])
-
 
             let res = this.fuzz_one(a);
 
@@ -69,14 +70,10 @@ let Fuzzer = class {
         }
     };
 
-    runner(ast){
-        eval(escodegen.generate(ast));
-    };
-
     fuzz_one(AST) {
             let a = this.mutator.mutate(AST)
             console.log("FUZZING ONE INPUT:" + AST)
-            return this.runner(a)
+            return agent(a)
             // !XXX: RETURN STATUS, HOW TO CHECK EVAL OUTPUT? NEED AGENT?
     }
 
