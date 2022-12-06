@@ -1,7 +1,7 @@
-const { exec_cp } = require("child_process");
+const exec_cp = require("child_process");
+const fs = require('fs');
+const escodegen = require('escodegen')
 
-// !XXX: each agent will allow us to run a snippet of code
-// !XXX: simple agent will run a node child process and monitor status
 
 module.exports = function(ast){
     run_cp(ast)
@@ -20,7 +20,7 @@ let CP_Agent = class {
         console.log("Filedescriptor: ", tmpObj.fd);
 
 
-        content = "escodegen = require('escodegen');eval(escodegen.generate("+ast+"));";
+        let content = "eval(`" + escodegen.generate(ast) +"`);";
 
         try {
             fs.writeFileSync(tmpObj.name, content);
@@ -29,16 +29,17 @@ let CP_Agent = class {
             console.error(err);
         }
 
-        exec_cp("node " + tmpObj.name, (error, stdout, stderr) => {
+        exec_cp.exec("node " + tmpObj.name, (error, stdout, stderr) => {
             if (error) {
                 console.log(`error: ${error.message}`);
-                return;
+                return 1;
             }
             if (stderr) {
                 console.log(`stderr: ${stderr}`);
-                return;
+                return 2;
             }
             console.log(`stdout: ${stdout}`);
+            return 0;
         });
            
     }

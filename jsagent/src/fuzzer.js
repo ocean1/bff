@@ -62,6 +62,7 @@ let Fuzzer = class {
             let a = ast.analyze(this.vectors[this.seed % this.vectors.length])
 
             let res = this.fuzz_one(a);
+            console.log("EXECUTION: " + res);
 
 
             console.log('---- cycle DONE ----')
