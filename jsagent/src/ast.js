@@ -10,8 +10,8 @@ function create_BBs(ast) {
     estraverse.traverse(ast, {
 
         enter: function (node, parent) {
-            console.log(node)
-            console.log("\n  ----------------------\n")
+            //console.log(node)
+            //console.log("\n  ----------------------\n")
             /*if (node.type == 'FunctionExpression' || node.type == 'FunctionDeclaration')
                 return estraverse.VisitorOption.Skip;*/
             // allora in teoria qui stiamo facendo il traversal imho, facciamo prima a fare un traversal che crea tutti i BB, poi andiamo in "execution order" sulla lista di BB :)      

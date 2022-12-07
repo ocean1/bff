@@ -5,28 +5,6 @@ agent = require('./agent.js');
 
 console.log(agent)
 
-// SAMPLE_INPUTS 
-codo = "var x = 0;\
-if (x != 0){\
-  var b = 10;\
-} else {\
-  var c = 12;\
-}\
-var d = b|c;\
-\
-var hugetempl = {length: 0x61};\
-var huge = new Float64Array(hugetempl);\
-var a = huge[0x61616161]*10;\
-console.log(d*a);"
-
-code = "var d = 11;\
-var a = 42;\
-var b = a;\
-var c = a + b;\
-a = c + 23;\
-c = a + d;"
-
-
 module.exports = function(){
   fuzz()
 };
@@ -51,15 +29,36 @@ let Fuzzer = class {
         this.mutator = new Mutator();
         this.seed = Math.floor(Math.random() * (Number.MAX_SAFE_INTEGER + 1)); // seed to guide fuzzer
         console.log("FUZZER SEED: " + this.seed);
-        this.vectors = [codo, code];  // input vectors for the fuzzer
+        this.vectors = new Array();
+        this.read_in();
     };
 
+    // read input vectors
+    read_in() {
+        const testFolder = './in/';
+        const fs = require('fs');
+
+        fs.readdirSync(testFolder).forEach(file => {
+            try {
+                const data = fs.readFileSync('./in/' + file, 'utf8');
+
+                this.vectors.push(data);
+            } catch (err) {
+                console.error(err);
+            }
+
+        });
+
+    }
+
+    // main fuzzing function
     fuzz() {
         while(1) {
             console.log('---- cycle START ----')
 
             // SELECT INPUT VECTOR FROM AVAILABLE ONES
-            let a = ast.analyze(this.vectors[this.seed % this.vectors.length])
+            let vector = this.vectors[this.seed % this.vectors.length]
+            let a = ast.analyze(vector)
 
             let res = this.fuzz_one(a);
             console.log("EXECUTION: " + res);
@@ -74,7 +73,7 @@ let Fuzzer = class {
     fuzz_one(AST) {
             let a = this.mutator.mutate(AST)
             console.log("FUZZING ONE INPUT:" + AST)
-            return agent(a)
+            return agent.run_cp(a)
             // !XXX: RETURN STATUS, HOW TO CHECK EVAL OUTPUT? NEED AGENT?
     }
 

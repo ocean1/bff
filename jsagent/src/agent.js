@@ -3,8 +3,8 @@ const fs = require('fs');
 const escodegen = require('escodegen')
 
 
-module.exports = function(ast){
-    run_cp(ast)
+module.exports = {
+    'run_cp':run_cp
 };
 
 
@@ -20,7 +20,7 @@ let CP_Agent = class {
         console.log("Filedescriptor: ", tmpObj.fd);
 
 
-        let content = "eval(`" + escodegen.generate(ast) +"`);";
+        let content = escodegen.generate(ast);
 
         try {
             fs.writeFileSync(tmpObj.name, content);
@@ -29,18 +29,24 @@ let CP_Agent = class {
             console.error(err);
         }
 
+        let res = -1;
         exec_cp.exec("node " + tmpObj.name, (error, stdout, stderr) => {
+            res = 0;
+            console.log("[!] RUNNING!")
             if (error) {
                 console.log(`error: ${error.message}`);
-                return 1;
+                res = 1;
             }
             if (stderr) {
                 console.log(`stderr: ${stderr}`);
-                return 2;
+                res = 2;
             }
             console.log(`stdout: ${stdout}`);
-            return 0;
+            res = 0;
+            return res;
         });
+
+        return res;
            
     }
 
@@ -49,7 +55,7 @@ let CP_Agent = class {
 
 function run_cp(ast){
     let cp = new CP_Agent();
-    console.log("RUNNING FUZZED INPUT")
+    console.log("[+] RUNNING FUZZED INPUT")
     
-    cp.run(ast)
+    return cp.run(ast)
 }
