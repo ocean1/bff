@@ -7,6 +7,15 @@ module.exports = {
     'run_cp':run_cp
 };
 
+function systemSync(cmd){
+    console.log("[!] RUNNING!")
+    exec_cp.exec(cmd, (err, stdout, stderr) => {
+      console.log('stdout is:' + stdout)
+      console.log('stderr is:' + stderr)
+      console.log('error is:' + err)
+    }).on('exit', code => console.log('final exit code is', code))
+  }
+
 
 let CP_Agent = class {
 
@@ -30,24 +39,10 @@ let CP_Agent = class {
         }
 
         let res = -1;
-        exec_cp.exec("node " + tmpObj.name, (error, stdout, stderr) => {
-            res = 0;
-            console.log("[!] RUNNING!")
-            if (error) {
-                console.log(`error: ${error.message}`);
-                res = 1;
-            }
-            if (stderr) {
-                console.log(`stderr: ${stderr}`);
-                res = 2;
-            }
-            console.log(`stdout: ${stdout}`);
-            res = 0;
-            return res;
-        });
+        let child = systemSync("node " + tmpObj.name);
+        console.log(child)
 
-        return res;
-           
+        return res; 
     }
 
 }
