@@ -14,7 +14,6 @@ function create_BBs(ast) {
             //console.log("\n  ----------------------\n")
             /*if (node.type == 'FunctionExpression' || node.type == 'FunctionDeclaration')
                 return estraverse.VisitorOption.Skip;*/
-            // allora in teoria qui stiamo facendo il traversal imho, facciamo prima a fare un traversal che crea tutti i BB, poi andiamo in "execution order" sulla lista di BB :)      
         
               },
 
@@ -53,10 +52,6 @@ function localValueNumbering(ast){
 
   return lvn_map;
 }
-
-// can I have something like an iterator inside the traversal?
-// we keep on adding statements to a block, and when a new block is met (i.e. control flow modified)
-// we can create a new BB then
 
 /*function writeVar(var,block,val){
   currentDef[var][block] = val

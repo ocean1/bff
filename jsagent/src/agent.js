@@ -14,6 +14,7 @@ function systemSync(cmd){
       console.log('stderr is:' + stderr)
       console.log('error is:' + err)
     }).on('exit', code => console.log('final exit code is', code))
+    // !XXX: on exit update execution status, and information maps
   }
 
 

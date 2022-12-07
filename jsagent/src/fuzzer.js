@@ -54,17 +54,18 @@ let Fuzzer = class {
     // main fuzzing function
     fuzz() {
         while(1) {
-            console.log('---- cycle START ----')
+            console.log('---- cycle START ----');
 
             // SELECT INPUT VECTOR FROM AVAILABLE ONES
             let vector = this.vectors[this.seed % this.vectors.length]
-            let a = ast.analyze(vector)
+            console.log(vector);
+            let a = ast.analyze(vector);
 
             let res = this.fuzz_one(a);
             console.log("EXECUTION: " + res);
 
 
-            console.log('---- cycle DONE ----')
+            console.log('---- cycle DONE ----');
             break;
         
         }
