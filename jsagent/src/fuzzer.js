@@ -13,7 +13,8 @@ module.exports = function(){
 let Mutator = class {
 
     constructor (){
-        this.seed = Math.floor(Math.random() * (Number.MAX_SAFE_INTEGER + 1));
+        //this.seed = Math.floor(Math.random() * (Number.MAX_SAFE_INTEGER + 1));
+        this.seed = Math.floor(Math.random() * ((Number.MAX_SAFE_INTEGER-2) - 0 + 1) ) + 0;
         console.log("MUTATOR SEED: " + this.seed);
     };
 
@@ -27,7 +28,10 @@ let Fuzzer = class {
 
     constructor (){
         this.mutator = new Mutator();
-        this.seed = Math.floor(Math.random() * (Number.MAX_SAFE_INTEGER + 1)); // seed to guide fuzzer
+        // note we are not using the full range because otherwise it will break RNG
+        // https://stackoverflow.com/questions/28461796/randomint-function-that-can-uniformly-handle-the-full-range-of-min-and-max-safe
+        this.seed = Math.floor(Math.random() * ((Number.MAX_SAFE_INTEGER-2) - 0 + 1) ) + 0;
+        // Math.floor(Math.random() * (Number.MAX_SAFE_INTEGER)); // seed to guide fuzzer
         console.log("FUZZER SEED: " + this.seed);
         this.vectors = new Array();
         this.read_in();
