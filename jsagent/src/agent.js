@@ -14,21 +14,19 @@ function systemSync(cmd){
       console.log('stderr is:' + stderr)
       console.log('error is:' + err)
     }).on('exit', code => console.log('final exit code is', code))
-    // !XXX: on exit update execution status, and information maps
+    // !XXX these won't run properly with current approach if we loop forever on parent...
+    // event loop should be considered
   }
 
 
 let CP_Agent = class {
 
     run (ast){
-        console.log("RUNNING " + ast)
+        console.log("[+] RUNNING AGENT")
 
         // create tmp file
         var tmp = require('tmp');
         var tmpObj = tmp.fileSync({ mode: parseInt('0644',8), prefix: 'projectA-', postfix: '.txt' });
-        console.log("File: ", tmpObj.name);
-        console.log("Filedescriptor: ", tmpObj.fd);
-
 
         let content = escodegen.generate(ast);
 
@@ -39,11 +37,7 @@ let CP_Agent = class {
             console.error(err);
         }
 
-        let res = -1;
         let child = systemSync("node " + tmpObj.name);
-        console.log(child)
-
-        return res; 
     }
 
 }
@@ -51,7 +45,5 @@ let CP_Agent = class {
 
 function run_cp(ast){
     let cp = new CP_Agent();
-    console.log("[+] RUNNING FUZZED INPUT")
-    
-    return cp.run(ast)
+    cp.run(ast)
 }

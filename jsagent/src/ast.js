@@ -10,16 +10,21 @@ function create_BBs(ast) {
     estraverse.traverse(ast, {
 
         enter: function (node, parent) {
-            //console.log(node)
-            //console.log("\n  ----------------------\n")
-            /*if (node.type == 'FunctionExpression' || node.type == 'FunctionDeclaration')
-                return estraverse.VisitorOption.Skip;*/
-        
-              },
+            console.log("\n [!] ENTERING " + node.id + '\n')
+            console.log(node)
+            //if (node.type == 'FunctionExpression' || node.type == 'FunctionDeclaration')
+            //    return estraverse.VisitorOption.Skip;
+            if (node.type == 'Literal'){
+              // basic change of literals
+              node.value = Math.random();
+              // !XXX we need a new visitor here
+            }
+        },
 
-      leave: function (node, parent) {/*
+      leave: function (node, parent) {
         if (node.type == 'VariableDeclarator')
-          console.log(node.id.name);*/}
+          console.log('\n [!] EXITING ' + node.id + '\n');
+      }
 
     });
 
