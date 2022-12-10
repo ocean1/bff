@@ -33,7 +33,6 @@ function create_BBs(ast) {
 function analyze(code) {
     var ast = esprima.parse(code);
     var BBs = create_BBs(ast);
-    //mutated = mutate(ast);
     return ast;
 };
 
