@@ -51,7 +51,8 @@ let Fuzzer = class {
 
         fs.readdirSync(testFolder).forEach(file => {
             try {
-                const data = fs.readFileSync('./in/' + file, 'utf8');
+                var data = fs.readFileSync('./in/' + file, 'utf8');
+                data = 'function noInline() { }; function load(m){var n = m;}; const { assert } = require("assert");' + data;
                 this.vectors.push(data);
             } catch (err) {
                 console.error(err);

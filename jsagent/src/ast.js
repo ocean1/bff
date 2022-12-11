@@ -16,7 +16,7 @@ function create_BBs(ast) {
             //    return estraverse.VisitorOption.Skip;
             if (node.type == 'Literal'){
               // basic change of literals
-              node.value = Math.random();
+              // node.value = Math.random();
               // !XXX we need a new visitor here
             }
         },
